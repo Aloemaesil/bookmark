@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  generation: 1
+  labels:
+    app: bookmark-nginx-write
+  name: bookmark-nginx-write
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: bookmark-nginx-write
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: bookmark-nginx-write
+    spec:
+      containers:
+      - image: aloemaesil/bookmark-nginx-write:v1.0
+        name: bookmark-nginx-write
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: bookmark-nginx-write
+  name: bookmark-nginx-write-svc
+  namespace: default
+spec:
+  selector:
+    app: bookmark-nginx-write
+  clusterIP: 172.20.21.115
+  clusterIPs:
+  - 172.20.21.115
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+  type: NodePort
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-nginx-write
+spec:
+  maxReplicas: 10
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: bookmark-nginx-write
+  targetCPUUtilizationPercentage: 50

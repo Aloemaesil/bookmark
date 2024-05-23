@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  generation: 1
+  labels:
+    app: bookmark-tomcat-main
+  name: bookmark-tomcat-main
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: bookmark-tomcat-main
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: bookmark-tomcat-main
+    spec:
+      containers:
+      - image: 885497063620.dkr.ecr.ap-northeast-2.amazonaws.com/bookmark-tomcat-main:v1.4
+        name: bookmark-tomcat-main
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: bookmark-tomcat-main
+  name: bookmark-tomcat-main-svc
+  namespace: default
+spec:
+  clusterIP: 172.20.2.115
+  clusterIPs:
+  - 172.20.2.115
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: bookmark-tomcat-main
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-bookmark-tomcat-main
+spec:
+  maxReplicas: 10
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: bookmark-tomcat-main
+  targetCPUUtilizationPercentage: 50

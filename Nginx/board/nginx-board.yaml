@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  generation: 1
+  labels:
+    app: bookmark-nginx-board
+  name: bookmark-nginx-board
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: bookmark-nginx-board
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: bookmark-nginx-board
+    spec:
+      containers:
+      - image: 885497063620.dkr.ecr.ap-northeast-2.amazonaws.com/bookmark-nginx-board:v1.1
+        name: bookmark-nginx-board
+        ports:
+        - containerPort: 80
+        resources: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: bookmark-nginx-board
+  name: bookmark-nginx-board-svc
+  namespace: default
+spec:
+  selector:
+    app: bookmark-nginx-board
+  clusterIP: 172.20.11.115
+  clusterIPs:
+  - 172.20.11.115
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+  type: NodePort
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-nginx-board
+spec:
+  maxReplicas: 10
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: bookmark-nginx-board
+  targetCPUUtilizationPercentage: 50

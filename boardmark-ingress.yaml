@@ -1,0 +1,50 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bookmark-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:885497063620:certificate/ee2fe440-86fe-412d-becd-2e2c5f4ed1a3
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '443'
+spec:
+  rules:
+    - https:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: bookmark-nginx-main-svc
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: /board
+            backend:
+              service:
+                name: bookmark-nginx-board-svc
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: /write
+            backend:
+              service:
+                name: bookmark-nginx-write-svc
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: /login
+            backend:
+              service:
+                name: bookmark-nginx-login-svc
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: /event
+            backend:
+              service:
+                name: bookmark-nginx-event-svc
+                port:
+                  number: 80

@@ -1,0 +1,167 @@
+* {
+    font-family: "Noto Sans KR", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: weight;
+    font-style: normal;
+    list-style: none;
+    text-decoration: none;
+    border-collapse: collapse;
+    margin: 0px;
+    padding: 0px;
+    color: black;
+}
+
+h1 {
+    font-size: 50px;
+    font-weight: 300;
+}
+
+.contents1 {
+    font-size: 20px;
+    font-weight: lighter;
+}
+
+.contents1_bold {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.contents3 {
+    font-size: 14px;
+    font-weight: 100;
+}
+
+
+/* --- */
+.result {
+    font-size: 24px;
+}
+
+.intro_bg {
+    background-image: url("../image/intro.png");
+    width: 100%;
+    height: 200px;
+}
+
+.header {
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 70px;
+}
+
+
+.nav {
+    display: flex;
+    justify-content: flex-end;
+    /* 네비게이션 항목들을 오른쪽으로 정렬합니다 */
+    align-items: center;
+    /* 수직 중앙 정렬을 수행합니다 */
+    width: 100%;
+    /* 네비게이션 바의 가로 폭을 100%로 설정합니다 */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* 배경색을 흰색에서 반투명한 검정색으로 설정합니다 */
+    height: 70px;
+    padding-right: 20px;
+    /* 네비게이션 바의 오른쪽 여백을 추가합니다 */
+}
+
+.nav>li {
+    margin-left: 20px;
+    /* 각 네비게이션 항목 사이에 오른쪽으로 공간을 추가합니다 */
+    list-style: none;
+    /* 리스트 마커를 숨깁니다 */
+}
+
+.nav>li>a {
+    color: #fff;
+    /* 네비게이션 링크의 글자색을 흰색으로 설정합니다 */
+    text-decoration: none;
+    /* 링크의 밑줄을 제거합니다 */
+    padding: 0 10px;
+    /* 네비게이션 항목의 내부 여백을 조정합니다 */
+}
+
+.intro_text {
+    width: 100%;
+    margin: 10px auto 10px auto;
+    text-align: center;
+
+}
+
+.intro_text>h1 .intro_text>h4 {
+    width: 105%;
+    color: #000;
+}
+
+.post-container {
+    text-align: center;
+}
+
+.post-box {
+    width: 1000px;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: left;
+    margin: 10px auto 10px auto;
+}
+
+.post-image {
+    float: left;
+    width: 200px;
+    height: auto;
+    border-radius: 10px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+.post-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.post-content {
+    margin-bottom: 15px;
+    margin-left: 235px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
+
+.post-summary {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.author-nickname {
+    font-style: italic;
+    color: #777;
+    margin-left: 230px;
+}
+
+.board-category {
+    font-style: italic;
+    color: #777;
+    margin-left: 230px;
+}
+
+#category-filter {
+    margin-left: 1230px;
+    margin-top: 20px;
+    width: 200px;
+    height: 40px;
+}
+body {
+    background-color: #f1f2f3;
+}

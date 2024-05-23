@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  generation: 1
+  labels:
+    app: bookmark-nginx-main
+  name: bookmark-nginx-main
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: bookmark-nginx-main
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: bookmark-nginx-main
+    spec:
+      containers:
+      - image: 885497063620.dkr.ecr.ap-northeast-2.amazonaws.com/bookmark-nginx-main:v1.0
+        name: bookmark-nginx-main
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: bookmark-nginx-main
+  name: bookmark-nginx-main-svc
+  namespace: default
+spec:
+  clusterIP: 172.20.1.115
+  clusterIPs:
+  - 172.20.1.115
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: bookmark-nginx-main
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-bookmark-nginx-main
+spec:
+  maxReplicas: 10
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: bookmark-nginx-main
+  targetCPUUtilizationPercentage: 50
